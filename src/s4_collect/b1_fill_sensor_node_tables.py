@@ -11,7 +11,7 @@ from s3_db.a1_connect_fetch import sensorNodes_dataDict
 from s3_db.a2_parsing_data import sql_command_from_json
 from s3_db.a4_meta_data import (extract_sensor_nodes_meta_data)
 from s3_db.a5_measured_data import (extract_sensorsMeasuredData_fromAuthGroupDict)
-from s3_db.a99_db_schema_creation import (print_dbTables_Values)
+from utils.db import (print_dbTables_totalRows)
 
 
 def sensor_node_id(cursor, sensor_node_name, sensor_node_type, entityId):
@@ -127,7 +127,8 @@ def filling_tables_with_sensor_measured_values(cursor):
             # raise Exception(f"{table_name} Table does not exist in DataBase; but it is found in auth_Group_Names from Server API")
             Logger.error(f"{table_name} Table does not exist in DataBase; but it is found in auth_Group_Names from Server API")
     
-    print_dbTables_Values(cursor)
+    # print_dbTables_Values(cursor)
+    print_dbTables_totalRows(cursor)
 
 # --- Only for testing purpose
 # def db_communication():

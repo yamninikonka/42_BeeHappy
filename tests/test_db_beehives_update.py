@@ -10,7 +10,7 @@ from src.s3_db.a1_connect_fetch import (sensorNodes_dataDict)
 from src.s3_db.a98_db_beehives_update import (read_beehives_sensornodes_json,
                                            data_from_RESTAPI,
                                            preparing_beehives_table_data,
-                                           conditional_automation)
+                                           trigger_automatic_db_schema_update)
 
 
 load_dotenv()
@@ -41,10 +41,10 @@ def test_read_beehives_sensornodes_json():
 
 def test_conditional_automation():
     # --- test with DB
-    conditional_automation(cursor, json_dict, sensorNodes_dataDict()) 
+    trigger_automatic_db_schema_update(cursor, json_dict, sensorNodes_dataDict()) 
 
 
 if __name__=="__main__":
-    # test_read_beehives_sensornodes_json()
-    test_conditional_automation()
+    test_read_beehives_sensornodes_json()
+    # test_conditional_automation()
     pass

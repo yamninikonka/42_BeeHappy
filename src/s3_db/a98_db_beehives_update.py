@@ -32,8 +32,7 @@ def read_beehives_sensornodes_json(j_file=os.path.join(pkg_path, "s1_data/beehiv
 def data_from_RESTAPI():
     TABLES_ITS_DATA=sensorNodes_dataDict()
     type_entityid={}
-    # print(tuple(TABLES_ITS_DATA.items())[0])
-    # print(TABLES_ITS_DATA.items())
+    
     for k, v in TABLES_ITS_DATA.items():
             type_entityid.update(extract_sensor_nodes_meta_data(v))
 
@@ -45,7 +44,6 @@ def preparing_beehives_table_data(beehives_json_dict, type_entityid):
             
     # beehives_sensornodes=['sensor_node_id', 'bee_hive', 'sensor_node_name', 'sensor_node_type', 
     #                       'sensor_node_entityid', 'time_of_entry']
-    # print(json.dumps(type_entityid, indent=4, sort_keys=True))
     for k, v in beehives_json_dict.items():
         each_value = [k, v[0], "LoRa-"+v[1]]
         if each_value[-1] in type_entityid.keys():
@@ -59,9 +57,7 @@ def preparing_beehives_table_data(beehives_json_dict, type_entityid):
 # in future any sensor node updates should trigger the whole db schema update, that can be achieved with below function
 def trigger_automatic_db_schema_update(cursor, beehives_json_dict, api_json_dict):
     NEW_SENSOR_NODES=len(list(api_json_dict.keys()))
-    NEW_BEEHIVES_JSON_DICT=len(list(beehives_json_dict.keys()))
-    # print(len(list(beehives_json_dict.keys())), NEW_BEEHIVES_JSON_DICT)
-    # print(len(list(api_json_dict.keys())), NEW_SENSOR_NODES)  # trigger new table creation
+    NEW_BEEHIVES_SENSOR_NODES_JSON=len(list(beehives_json_dict.keys()))
     
     query="""SELECT max(sensor_node_id) FROM beehives_sensornodes;"""
     cursor.execute(query)
@@ -70,9 +66,10 @@ def trigger_automatic_db_schema_update(cursor, beehives_json_dict, api_json_dict
     TotalSensorNodeTypes=get_total_sensor_node_types()
 
     # If the new sensor node is mounted and beehives json file must be updated, if it is not: no update
-    if (NEW_SENSOR_NODES>TotalSensorNodeTypes & NEW_BEEHIVES_JSON_DICT>CURRENT_TOTAL_SENSOR_NODES):
+    if (NEW_SENSOR_NODES>TotalSensorNodeTypes & NEW_BEEHIVES_SENSOR_NODES_JSON>CURRENT_TOTAL_SENSOR_NODES):
         # --- 1. Trigger the beehives_sensornodes table update
-        automatic_update_from_beehives_json(cursor)
+        # update starts from newly added sensor nodes, very important to not overwrite the existing sensor nodes
+        automatic_update_from_beehives_json(cursor, CURRENT_TOTAL_SENSOR_NODES)
 
         # --- 2. Create new sensornode table, New_Auth_Group Table
         new_sensor_node_starts=TotalSensorNodeTypes 
@@ -85,10 +82,11 @@ def trigger_automatic_db_schema_update(cursor, beehives_json_dict, api_json_dict
 
         Logger.info(f"new sensor nodes are added to DB, when: {datetime.now().replace(microseconds=0)}")
     else:
-        Logger.info(f"currently no new sensor nodes are mounted")
+        Logger.info(f"currently no new sensor nodes are mounted Or json file(/s1_data) is not yet updated")
 
 # when all sensor node column values are in hand then below function fills the beehives_sensornodes table
-def automatic_update_from_beehives_json(cursor):
+# @TODO:delete it in future it is same as automatic_update_from_beehives_json(cursor, previous_sensor_node_names=0)
+def initial_fill_from_beehives_json(cursor):
     # -- automatic update of the sensor names from json file
     sql = "INSERT INTO beehives_sensornodes (sensor_node_id, bee_hive, sensor_node_name, " \
     "sensor_node_type, sensor_node_entityid, time_of_entry) " \
@@ -99,9 +97,33 @@ def automatic_update_from_beehives_json(cursor):
 
     # Insert multiple rows
     cursor.executemany(sql, values)
-    
-# --- currently not used, however useful for future implementations
+
+def automatic_update_from_beehives_json(cursor, previous_sensor_node_names=0):
+    """
+    when there is new sensor node mounted it can be known from the REST API data,
+    based on that info and the beehives_sensornodes.json file data, 
+    the beehives_sensornodes table will be updated.
+    """
+    # raise NotImplementedError("This function is not implemented yet. It will be implemented in the future.")
+    # -- automatic update of the sensor names from json file
+    sql = "INSERT INTO beehives_sensornodes (sensor_node_id, bee_hive, sensor_node_name, " \
+    "sensor_node_type, sensor_node_entityid, time_of_entry) " \
+    "VALUES (%s, %s, %s, %s, %s, NOW())"
+
+    # List of tuples: each tuple is a row to insert
+    values = preparing_beehives_table_data(read_beehives_sensornodes_json(), data_from_RESTAPI())[previous_sensor_node_names:]
+
+    # Insert multiple rows
+    cursor.executemany(sql, values)
+
+# # --- currently not used, however useful for future implementations
 # def filling_sensor_types_upon_condition(cursor):
+#     """
+#     a case where this is useful: when the preparing_beehives_table_data() function is called
+#     then the result=[[1, LORA_133456, S2120, edi324djf73856h9234058dh203743],
+#                      [2, LORA_12564, None, None]]
+#     this function can be used to fill the None values with the sensor node type and entityid
+#     """
 #     # -- filling sensor node based on sensor name
 #     for table_name, type_entityid in extract_sensor_nodes_meta_data().items():
 #         cursor.execute(
@@ -114,7 +136,7 @@ def db_beehives_table_update(cursor):
     
     # -------------- Filling Database Table -------------------
     # # --- 1. Beehives_Sensornodes Filling Values ---
-    automatic_update_from_beehives_json(cursor)
+    initial_fill_from_beehives_json(cursor)
 
     # # # --- 2. Filling based on Condition ---
     # use it to triger the table update when New Node is Mounted
@@ -124,5 +146,4 @@ def db_beehives_table_update(cursor):
     # new_sensor_node_insertion()
     # print_db_tables(cursor)
     print_dbTables_Values(cursor)
-
 

@@ -2,6 +2,8 @@
 
 import pandas as pd
 
+from __init__ import Logger
+
 
 def print_dbTables_Columns(cursor):
     # ----- @Perplexity -----
@@ -49,3 +51,23 @@ def print_dbTables_Values(cursor):
         print(df)
         print()
 
+def print_dbTables_totalRows(cursor):
+    cursor.execute("""
+        SELECT tablename
+        FROM pg_tables
+        WHERE schemaname = 'public';
+    """)
+    tables = cursor.fetchall()
+
+    for (table_name,) in tables:
+        # Get rows from each table
+        cursor.execute(f"""
+            SELECT COUNT(*) FROM {table_name};
+        """)
+        rows=cursor.fetchall()
+        if rows:
+            Logger.info(f"{table_name}, total Rows: {rows[0]}\n")
+            print(f"{table_name}, total Rows: {rows[0]}\n")
+        else:
+            Logger.info(f"{table_name}, total Rows: 0\n")
+            print(f"{table_name}, total Rows: 0\n")

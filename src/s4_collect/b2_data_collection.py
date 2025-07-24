@@ -74,3 +74,25 @@ def beehappy_data_collection():
         # --- Close Database Connection at the End
         db_connection_close(conn, cursor)
 
+def beehappy_db_clean_createschema():
+    """
+    1. check if schema is existed, not create it
+    2. update the beehives table, which contains the meta data of the sensor nodes- combines physical and virtual sensor nodes
+    3. if all is good, then start filling tables
+    4. repeat this for every 5 minutes
+    """
+    conn= db_connection()
+    if not conn:
+        Logger.error("Failed to connect to the database.")
+        return
+    cursor = conn.cursor()
+
+    # --- Beehappy Data Base Clean Up and Reconfigure Workflow ---
+    db_schema_creation(cursor, del_schema=True)
+    db_schema_verification(cursor)
+    db_beehives_table_update(cursor)
+
+    Logger.info("Database schema deleted. Recreated again and beehives table filled.")
+
+    # --- Close Database Connection at the End
+    db_connection_close(conn, cursor)

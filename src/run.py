@@ -11,7 +11,7 @@ from __init__ import Logger, pkg_path
 # from src.s1_db.a98_db_beehives_update import db_beehives_table_update
 # from src.collect.fill import db_communication
 from s2_configure.monitor import send_email
-from s4_collect.b2_data_collection import beehappy_data_collection
+from s4_collect.b2_data_collection import (beehappy_data_collection, beehappy_db_clean_createschema)
 
 def run_every_5minutes():
     while True:
@@ -33,17 +33,9 @@ def run_every_5minutes():
             time.sleep(300)  # wait exactly 5 minutes
 
 if __name__=="__main__":
-    # # Schema creation
-    # db_schema_creation()
-
-    # # Table beehive update
-    # db_beehives_table_update()
-
-    # # filling values for every 1 minute
-    # db_communication()
+    # # db clean up -- not working as expected- @TODO: fix this
+    # beehappy_db_clean_createschema()
 
     # automatic data collection
     run_every_5minutes()
     
-
-

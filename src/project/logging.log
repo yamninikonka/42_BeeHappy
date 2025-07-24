@@ -1,8 +1,57 @@
-2025-07-23 19:41:34 | INFO | run.py | Starting data collection...
-2025-07-23 19:41:34 | ERROR | run.py | Error occurred during data storage and Program Terminated abruptly
+2025-07-24 12:47:41 | INFO | run.py | Starting data collection...
+2025-07-24 12:47:41 | INFO | b2_data_collection.py | Database schema exists. Filling tables with values.
+2025-07-24 12:47:42 | INFO | a98_db_beehives_update.py | currently no new sensor nodes are mounted Or json file(/s1_data) is not yet updated
+2025-07-24 12:47:44 | INFO | b1_fill_sensor_node_tables.py | Inserted data into table: digital_bee_hive_42_s2120
+2025-07-24 12:47:44 | INFO | b1_fill_sensor_node_tables.py | Inserted data into table: digital_bee_hive_42_dragino_s31lb
+2025-07-24 12:47:44 | INFO | b1_fill_sensor_node_tables.py | Inserted data into table: digital_bee_hive_42_dragino_d23_lb
+2025-07-24 12:47:44 | INFO | db.py | beehives_sensornodes, total Rows: (7,)
+2025-07-24 12:47:44 | ERROR | run.py | Error occurred during data storage and Program Terminated abruptly
 Traceback (most recent call last):
-  File "E:\VS_Code_Projects_2025\42\BeeHappy/src/run.py", line 22, in run_every_5minutes
-    s=1/0
-      ~^~
-ZeroDivisionError: division by zero
-2025-07-23 19:41:36 | INFO | monitor.py | Email sent to yamini.technical@yahoo.com
+  File "E:\VS_Code_Projects_2025\42\BeeHappy/src/run.py", line 21, in run_every_5minutes
+    beehappy_data_collection()
+  File "E:\VS_Code_Projects_2025\42\BeeHappy/src\s4_collect\b2_data_collection.py", line 72, in beehappy_data_collection
+    filling_tables_with_sensor_measured_values(cursor)
+  File "E:\VS_Code_Projects_2025\42\BeeHappy/src\s4_collect\b1_fill_sensor_node_tables.py", line 131, in filling_tables_with_sensor_measured_values
+    print_dbTables_totalRows(cursor)
+  File "E:\VS_Code_Projects_2025\42\BeeHappy/src\utils\db.py", line 69, in print_dbTables_totalRows
+    print(f"{table_name}, total Rows: {cursor.fetchall()[0]}")
+                                       ~~~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+2025-07-24 12:47:47 | INFO | monitor.py | Email sent to yamini.technical@yahoo.com
+2025-07-24 12:51:31 | INFO | run.py | Starting data collection...
+2025-07-24 12:51:32 | INFO | b2_data_collection.py | Database schema exists. Filling tables with values.
+2025-07-24 12:51:33 | INFO | a98_db_beehives_update.py | currently no new sensor nodes are mounted Or json file(/s1_data) is not yet updated
+2025-07-24 12:51:34 | INFO | b1_fill_sensor_node_tables.py | Inserted data into table: digital_bee_hive_42_s2120
+2025-07-24 12:51:35 | INFO | b1_fill_sensor_node_tables.py | Inserted data into table: digital_bee_hive_42_dragino_s31lb
+2025-07-24 12:51:35 | INFO | b1_fill_sensor_node_tables.py | Inserted data into table: digital_bee_hive_42_dragino_d23_lb
+2025-07-24 12:51:35 | INFO | db.py | beehives_sensornodes, total Rows: (7,)
+
+2025-07-24 12:51:35 | INFO | db.py | digital_bee_hive_42_s2120, total Rows: (90,)
+
+2025-07-24 12:51:35 | INFO | db.py | digital_bee_hive_42_dragino_s31lb, total Rows: (270,)
+
+2025-07-24 12:51:35 | INFO | db.py | digital_bee_hive_42_dragino_d23_lb, total Rows: (270,)
+
+2025-07-24 12:51:35 | INFO | db.py | Database connection closed successfully.
+2025-07-24 12:51:35 | INFO | run.py | Data stored successfully.
+2025-07-24 12:55:41 | INFO | a99_db_schema_creation.py | Deleting existing database schema...
+2025-07-24 12:55:41 | INFO | a99_db_schema_creation.py | Database schema deleted successfully.
+2025-07-24 12:55:42 | INFO | a99_db_schema_creation.py | Database schema created successfully.
+2025-07-24 12:55:44 | INFO | b2_data_collection.py | Database schema deleted. Recreated again and beehives table filled.
+2025-07-24 12:55:44 | INFO | db.py | Database connection closed successfully.
+2025-07-24 12:59:58 | INFO | run.py | Starting data collection...
+2025-07-24 12:59:58 | INFO | b2_data_collection.py | Database schema exists. Filling tables with values.
+2025-07-24 13:00:00 | INFO | a98_db_beehives_update.py | currently no new sensor nodes are mounted Or json file(/s1_data) is not yet updated
+2025-07-24 13:00:01 | INFO | b1_fill_sensor_node_tables.py | Inserted data into table: digital_bee_hive_42_s2120
+2025-07-24 13:00:01 | INFO | b1_fill_sensor_node_tables.py | Inserted data into table: digital_bee_hive_42_dragino_s31lb
+2025-07-24 13:00:02 | INFO | b1_fill_sensor_node_tables.py | Inserted data into table: digital_bee_hive_42_dragino_d23_lb
+2025-07-24 13:00:02 | INFO | db.py | beehives_sensornodes, total Rows: (7,)
+
+2025-07-24 13:00:02 | INFO | db.py | digital_bee_hive_42_s2120, total Rows: (90,)
+
+2025-07-24 13:00:02 | INFO | db.py | digital_bee_hive_42_dragino_s31lb, total Rows: (270,)
+
+2025-07-24 13:00:02 | INFO | db.py | digital_bee_hive_42_dragino_d23_lb, total Rows: (270,)
+
+2025-07-24 13:00:02 | INFO | db.py | Database connection closed successfully.
+2025-07-24 13:00:02 | INFO | run.py | Data stored successfully.

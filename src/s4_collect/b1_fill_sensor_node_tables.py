@@ -1,63 +1,17 @@
-
 # python 3.12
 # postgresql
 
-import json
 import psycopg2.extras
-import requests
 import psycopg2
-import os
 from datetime import datetime
 
 import __init__
-from src import Logger
-from src.s1_db.a1_connect_fetch import sensorNodes_dataDict
-from src.s1_db.a2_parsing_data import sql_command_from_json
-from src.s1_db.a4_meta_data import (extract_sensor_nodes_meta_data)
-from src.s1_db.a5_measured_data import (extract_sensorsMeasuredData_fromAuthGroupDict)
-from src.s1_db.a99_db_schema_creation import (print_dbTables_Values)
-
-# GREEN = "\033[92m"
-# RED = "\033[91m"
-# RESET = "\033[0m"
-
-# load_dotenv()
-# api_key = os.getenv("API_KEY")
-# db_password = os.getenv("DB_PASSWORD")
-
-
-# base_url = "https://apis.smartcity.hn/bildungscampus/iotplatform/digitalbeehive/v1/authGroup/"
-
-# def get_auth_groups_from_url(url):
-#     r = requests.get(url + api_key)
-#     auth_groups = r.json()
-#     return auth_groups
-
-
-# def get_auth_group(auth_group_name):
-#     url = base_url + auth_group_name + "/entityId?page=0&x-apikey=" + api_key
-#     print(f"{GREEN}-----{auth_group_name}-----{RED}")
-
-#     try:
-#         response = requests.get(url)
-#         response.raise_for_status()  # Raise an error for bad responses
-#         return [auth_group_name, response.json()]
-#     except requests.exceptions.RequestException as e:
-#         print(f"An error occurred: {e}")
-#         return None
-#     except ValueError as e:
-#         print(f"Error parsing JSON response: {e}")
-#         return None
-
-
-# def filling_sensor_types_upon_condition(cursor):
-#     # -- filling sensor node based on sensor name
-#     # entities>>>ENTITY_FIELD(name, type)||TIME_SERIES(keys)||entityId(id)
-#     for name, type_value in all_node_types().items():
-#         cursor.execute(
-#             "UPDATE beehives_sensornodes SET sensor_node_type = %s WHERE sensor_node_name = %s",
-#             (type_value, name)
-#         )
+from __init__ import Logger
+from s3_db.a1_connect_fetch import sensorNodes_dataDict
+from s3_db.a2_parsing_data import sql_command_from_json
+from s3_db.a4_meta_data import (extract_sensor_nodes_meta_data)
+from s3_db.a5_measured_data import (extract_sensorsMeasuredData_fromAuthGroupDict)
+from s3_db.a99_db_schema_creation import (print_dbTables_Values)
 
 
 def sensor_node_id(cursor, sensor_node_name, sensor_node_type, entityId):
@@ -144,6 +98,12 @@ def insert_into_table(cursor, table_name:str, json_data:dict):
 
 
 def filling_tables_with_sensor_measured_values(cursor):
+    """
+    1. check tables are existed, if not create
+    2. fetch sensor_id for child tables
+    3. insert data into child tables
+    4. 
+    """
     # current_time = datetime.now()
     # #------------------------------
     # auth_groups = get_auth_groups_from_url(base_url[:-1]+"?x-apikey=")
@@ -161,6 +121,7 @@ def filling_tables_with_sensor_measured_values(cursor):
     for table_name, json_data in sensorNodes_dataDict().items():
         if table_existence_check(cursor, table_name, json_data):
             insert_into_table(cursor, table_name, json_data)
+            Logger.info(f"Inserted data into table: {table_name}")
         else:
             # log error
             # raise Exception(f"{table_name} Table does not exist in DataBase; but it is found in auth_Group_Names from Server API")

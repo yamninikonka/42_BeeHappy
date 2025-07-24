@@ -1,13 +1,13 @@
 
 import __init__
-from src.s1_db.a1_connect_fetch import (get_authGroups_fromUrl,
+from src.s3_db.a1_connect_fetch import (get_authGroups_fromUrl,
                                      get_tableName_and_itsDict_fromUrl) 
-from src.s1_db.a2_parsing_data import (sql_command_from_json)
-from src.s1_db.a3_json_to_triplequote import (timeSeries_dTypeAssignment,
+from src.s3_db.a2_parsing_data import (sql_command_from_json)
+from src.s3_db.a3_json_to_triplequote import (timeSeries_dTypeAssignment,
                                            tableCreation_SQLStatement)
-from src.s1_db.a4_meta_data import(extract_sensors_timeSeriesData,
+from src.s3_db.a4_meta_data import(extract_sensors_timeSeriesData,
                                 extract_sensor_nodes_meta_data)
-from src.s1_db.a5_measured_data import (extract_sensorsMeasuredData_fromAuthGroupDict)
+from src.s3_db.a5_measured_data import (extract_sensorsMeasuredData_fromAuthGroupDict)
 
 base_url = "https://apis.smartcity.hn/bildungscampus/iotplatform/digitalbeehive/v1/authGroup/"
 

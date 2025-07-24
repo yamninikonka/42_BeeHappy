@@ -1,25 +1,14 @@
 # python 3.12
 # postgreSQL
 # connect to server and send http GET request. 
-# Then after fetch the data, finally store it local in an variable for further processing
+# once connection is established, then fetch the data, finally store it local variable for further processing
 
 import requests
-from dotenv import load_dotenv
-import os
 from pathlib import Path
 
-from src import Logger
+from __init__ import Logger
+from s2_configure.db import base_url, api_key
 
-GREEN = "\033[92m"
-RED = "\033[91m"
-RESET = "\033[0m"
-
-# Security
-load_dotenv() # dotenv_path=Path("../src/data/.env")
-api_key = os.getenv("API_KEY")
-
-# Connection to Server using HTTP Request
-base_url = "https://apis.smartcity.hn/bildungscampus/iotplatform/digitalbeehive/v1/authGroup/"
 
 # first page in an server to know which sensor node types are mounted
 # s2120, s31lb, d23-lb

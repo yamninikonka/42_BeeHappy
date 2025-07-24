@@ -1,0 +1,7 @@
+
+services:
+  app:
+    build: .
+    image: beehappy-monitor:latest
+    container_name: beehappy_app
+    restart: unless-stopped

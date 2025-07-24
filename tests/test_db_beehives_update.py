@@ -6,8 +6,8 @@ import psycopg2
 from dotenv import load_dotenv
 
 import __init__
-from src.s1_db.a1_connect_fetch import (sensorNodes_dataDict)
-from src.s1_db.a98_db_beehives_update import (read_beehives_sensornodes_json,
+from src.s3_db.a1_connect_fetch import (sensorNodes_dataDict)
+from src.s3_db.a98_db_beehives_update import (read_beehives_sensornodes_json,
                                            data_from_RESTAPI,
                                            preparing_beehives_table_data,
                                            conditional_automation)

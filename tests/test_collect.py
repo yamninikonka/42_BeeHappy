@@ -4,7 +4,7 @@ import psycopg2
 from dotenv import load_dotenv
 
 import __init__
-from src.collect.fill import (sensor_node_id, table_existence_check,
+from src.s4_collect.b1_fill_sensor_node_tables import (sensor_node_id, table_existence_check,
                               insert_into_table,
                               sensorNodes_dataDict,
                               extract_sensor_nodes_meta_data)

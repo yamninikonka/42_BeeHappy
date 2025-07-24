@@ -4,6 +4,8 @@
 
 from typing import Dict
 
+# from s3_db import RED, GREEN, RESET
+
 
 def extract_sensors_timeSeriesData(json_data: dict)->Dict[str, Dict[str, str]]:
     """"

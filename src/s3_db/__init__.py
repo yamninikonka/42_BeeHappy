@@ -1,11 +1,23 @@
+# src/s3_db/__init__.py
+# -*- coding: utf-8 -*-
+# This file is part of the digital beehive project.
+# It is subject to the license terms in the LICENSE file found in the top-level directory of this distribution.
+"""This module initializes the S3 database package for the digital beehive project.
+Currently, it contains commented-out code for global db variables and API json data fetching info for reference."""
 
-from src.__init__ import Total_Sensor_Node_Types
+
 # from src.db.a1_connect_fetch import (get_auth_groups_from_url,
 #                                   get_table_name_and_its_dict_from_url)
 
 # Connection to Server using HTTP Request
-base_url = "https://apis.smartcity.hn/bildungscampus/iotplatform/digitalbeehive/v1/authGroup/"
+# base_url = "https://apis.smartcity.hn/bildungscampus/iotplatform/digitalbeehive/v1/authGroup/"
 
+GREEN = "\033[92m"
+RED = "\033[91m"
+RESET = "\033[0m"
+# Global variables for database connection and API data fetching
+# AUTH_GROUPS = None  # Will be initialized with auth groups data
+# TABLES_ITS_DATA = None  # Will be initialized with table names and their data
 # send get request one time to server, multiple requests in different functions 
 # can vary the data because of different calls in different times.
 # careful about data updation interval for such kind of code implementation

@@ -9,31 +9,6 @@
 
 from typing import Dict
 
-GREEN = "\033[92m"
-RED = "\033[91m"
-RESET = "\033[0m"
-
-# def extract_sensors_time_series_data(json_data: dict)->Dict[str, Dict[str, str]]:
-#     """"
-#     params:
-#         json_data: each sensor_node_type(s2120, d23-lb, s31-lb) is an single page.
-#         that is read from an http get request and parsed then pass it as an argument to this function
-    
-#     return:
-#         timeseries data of each entity in an page(sensor_node_type)
-#     """
-#     if json_data:
-#         entities = json_data.get("entities", [])
-#         each_node_time_series = {}
-#         for entity in entities:
-#         #     print(f"{RESET}{entity["entityId"]["id"]}")
-#         #     print(f"{RED}{entity["ENTITY_FIELD"]["name"]}, ---, {entity["ENTITY_FIELD"]["type"]}")
-#         #     print(f"{GREEN}{dict(entity["TIME_SERIES"].items())}")
-#             each_node_time_series[entity["ENTITY_FIELD"]["name"]] = dict(entity["TIME_SERIES"].items())
-
-#         # print("\n=======================================================================\n")
-
-#     return each_node_time_series
 
 
 # each sensor data in time_series dict must be assigned to corresponding SQL datatypes supported by PostgreSQL

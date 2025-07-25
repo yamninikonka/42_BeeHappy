@@ -60,14 +60,36 @@ def print_dbTables_totalRows(cursor):
     tables = cursor.fetchall()
 
     for (table_name,) in tables:
-        # Get rows from each table
+        # --- Get rows from each table
         cursor.execute(f"""
             SELECT COUNT(*) FROM {table_name};
         """)
         rows=cursor.fetchall()
-        if rows:
-            Logger.info(f"{table_name}, total Rows: {rows[0]}\n")
-            print(f"{table_name}, total Rows: {rows[0]}\n")
+        if len(rows)>0:
+            Logger.info(f"{table_name}, Total Rows: {rows[0]}")
+            print(f"{table_name}, Total Rows: {rows[0]}")
         else:
-            Logger.info(f"{table_name}, total Rows: 0\n")
-            print(f"{table_name}, total Rows: 0\n")
+            Logger.info(f"{table_name}, Total Rows: 0")
+            print(f"{table_name}, Total Rows: 0")
+
+        # --- Get last row from each table
+        # Note: For beehives_sensornodes, we use time_of_entry instead of time_of_save
+        if table_name!="beehives_sensornodes":
+            cursor.execute(f"""
+                SELECT * FROM {table_name}
+                ORDER BY time_of_save DESC
+                LIMIT 1;""")
+        else:
+            cursor.execute(f"""
+                SELECT * FROM {table_name}
+                ORDER BY time_of_entry DESC
+                LIMIT 1;""")
+        last_row=cursor.fetchall()
+        if last_row:
+            Logger.info(f"Last row: {last_row[0]}")
+            print(f"Last row: {last_row[0]}\n")
+        else:
+            Logger.error(f"No rows found in {table_name}.")
+            print(f"Error: No rows found in {table_name}.\n")
+
+        

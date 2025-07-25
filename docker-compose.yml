@@ -2,6 +2,6 @@
 services:
   app:
     build: .
-    image: beehappy-monitor:latest
+    image: beehappy-data-collector:latest
     container_name: beehappy_app
     restart: unless-stopped

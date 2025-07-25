@@ -11,7 +11,7 @@ from s3_db.a1_connect_fetch import sensorNodes_dataDict
 from s3_db.a2_parsing_data import sql_command_from_json
 from s3_db.a4_meta_data import (extract_sensor_nodes_meta_data)
 from s3_db.a5_measured_data import (extract_sensorsMeasuredData_fromAuthGroupDict)
-from utils.db import (print_dbTables_totalRows)
+from utils.db import (print_dbTables_totalRows, print_dbTables_Values)
 
 
 def sensor_node_id(cursor, sensor_node_name, sensor_node_type, entityId):

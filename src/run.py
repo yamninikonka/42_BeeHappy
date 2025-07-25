@@ -18,6 +18,11 @@ def run_every_5minutes():
         try:
             # print("current path::::: ", os.getcwd())
             Logger.info("Starting data collection...")
+            # --- Do not run both at the same time, either of one at a time ---
+            # # --- DB clean up -- not working as expected- @TODO: fix this
+            # beehappy_db_clean_createschema()
+
+            # --- Data Collection
             beehappy_data_collection()
             Logger.info("Data stored successfully.")
 
@@ -29,13 +34,12 @@ def run_every_5minutes():
                 to_email="yamini.technical@yahoo.com")
             sys.exit(1) # signal to terminate the program
 
-        else:  # incase no cron job in docker
-            time.sleep(300)  # wait exactly 5 minutes
+        finally:  # except or not, it executes all the time
+            # wait for next 15 minutes and then start the data collection again
+            Logger.info("Waiting for 15 minutes before the next data collection cycle...")
+            time.sleep(900)  # wait exactly 15 minutes
 
 if __name__=="__main__":
-    # # db clean up -- not working as expected- @TODO: fix this
-    # beehappy_db_clean_createschema()
-
     # automatic data collection
     run_every_5minutes()
     

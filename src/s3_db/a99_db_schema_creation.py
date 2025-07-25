@@ -32,11 +32,15 @@ def delete_db_schema(cursor, TABLES_DATA):
     Deletes the existing database schema.
     """
     get_auth_group=list(TABLES_DATA.keys())
-    cursor.execute(f"""DROP TABLE IF EXISTS beehives_sensornodes, 
-                   {get_auth_group[0].replace('-', '_')}, 
-                   {get_auth_group[1].replace('-', '_')}, 
-                   {get_auth_group[2].replace('-', '_')} 
+    cursor.execute(f"""DROP TABLE IF EXISTS public.beehives_sensornodes, 
+                   public.{get_auth_group[0].replace('-', '_')}, 
+                   public.{get_auth_group[1].replace('-', '_')}, 
+                   public.{get_auth_group[2].replace('-', '_')} 
                    CASCADE;""")
+    # cursor.execute(f"""TRUNCATE TABLE beehives_sensornodes, 
+    #                {get_auth_group[0].replace('-', '_')}, 
+    #                {get_auth_group[1].replace('-', '_')}, 
+    #                {get_auth_group[2].replace('-', '_')};""")
     # Add more tables to drop if necessary
     Logger.info("Database schema deleted successfully.")
 

@@ -1,7 +1,7 @@
 # python 3.12
 # postgresSQL
 
-import os
+import time
 import psycopg2
 from dotenv import load_dotenv
 
@@ -42,11 +42,16 @@ def beehappy_data_collection():
     3. if all is good, then start filling tables
     4. repeat this for every 5 minutes
     """
-    conn= db_connection()
-    if not conn:
+    try:
+        conn= db_connection()
+
+    except psycopg2.Error as e:
         Logger.error("Failed to connect to the database.")
-        return
-    cursor = conn.cursor()
+        raise e
+    
+    else:
+        cursor = conn.cursor()
+        conn.autocommit = False
 
     if is_schema_empty(cursor):
         Logger.info("Database schema is empty. Creating tables.")
@@ -60,17 +65,21 @@ def beehappy_data_collection():
     try:
         beehives_json_dict=read_beehives_sensornodes_json()
         api_json_dict=sensorNodes_dataDict()
-    except Exception as e:  
-        Logger.error(f"Error during data collection: {e}")
-        db_connection_close(conn, cursor)
-        return
-    else:
 
         trigger_automatic_db_schema_update(cursor=cursor, 
                                         beehives_json_dict=beehives_json_dict, 
                                         api_json_dict=api_json_dict)
         filling_tables_with_sensor_measured_values(cursor)
+        conn.commit()  # Commit the transaction if all operations are successful
+        Logger.info("Data collection and insertion completed successfully.")
+        time.sleep(300)  # wait exactly 5 minutes
 
+    except Exception as e:  
+        Logger.error(f"Error during data collection: {e}")
+        conn.rollback()  # Rollback the transaction in case of error
+        raise e  # Re-raise the exception to be handled by the caller
+    
+    finally:
         # --- Close Database Connection at the End
         db_connection_close(conn, cursor)
 

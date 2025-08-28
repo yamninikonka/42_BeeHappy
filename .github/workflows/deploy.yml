@@ -1,0 +1,42 @@
+name: Deploy Docker Bee Happy Data Collector
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Build Docker image
+        run: |
+          docker build -t my-python-app .
+
+      - name: Save Docker image as tar
+        run: |
+          docker save my-python-app > my-python-app.tar
+
+      - name: Copy Docker image to remote server
+        run: |
+          scp -i ~/.ssh/id_rsa my-python-app.tar ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/tmp/my-python-app.tar
+
+      - name: Load & run Docker image on server
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            docker load < /tmp/my-python-app.tar
+            docker stop my-python-app || true
+            docker rm my-python-app || true
+            docker run -d --name my-python-app my-python-app
+          EOF

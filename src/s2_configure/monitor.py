@@ -18,10 +18,11 @@ def send_email(subject, body, to_email):
     dotenv_path = os.path.join(pkg_path, 'project', '.env')
     load_dotenv(dotenv_path)
     # load_dotenv()   # Load environment variables from .env file
-    yahoo_password = os.getenv('YAHOO_APP_PASSWORD')  # Use environment variable for security
+    # yahoo_password = os.getenv('YAHOO_APP_PASSWORD')  # Use environment variable for security
+    gmail_password = os.environ.get('GMAIL_APP_PASSWORD')  # Use environment variable for security
     try:
         with smtplib.SMTP_SSL('smtp.mail.gmail.com', 465) as server:
-            server.login(msg['From'], yahoo_password)
+            server.login(msg['From'], gmail_password)
             server.send_message(msg)
         Logger.info(f"Email sent to {to_email}")
     except Exception as e:

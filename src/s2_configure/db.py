@@ -6,13 +6,17 @@ import psycopg2
 from __init__ import Logger, pkg_path
 
 
-# Security
-# Load .env from the "config" subfolder
-dotenv_path = os.path.join(pkg_path, 'project', '.env')
-load_dotenv(dotenv_path)
-# load_dotenv() # dotenv_path=Path("../src/data/.env")
-api_key = os.getenv("API_KEY")
-db_password = os.getenv("DB_PASSWORD")
+# # Security
+# # Load .env from the "config" subfolder
+# dotenv_path = os.path.join(pkg_path, 'project', '.env')
+# load_dotenv(dotenv_path)
+# # load_dotenv() # dotenv_path=Path("../src/data/.env")
+# api_key = os.getenv("API_KEY")
+# db_password = os.getenv("DB_PASSWORD")
+
+# ----- Security -----
+api_key = os.environ.get('API_KEY')
+db_password = os.environ.get('DB_PASSWORD')
 
 # Connection to Server using HTTP Request
 base_url = "https://apis.smartcity.hn/bildungscampus/iotplatform/digitalbeehive/v1/authGroup/"
